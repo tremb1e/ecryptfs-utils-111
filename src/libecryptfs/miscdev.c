@@ -141,7 +141,7 @@ int ecryptfs_recv_miscdev(struct ecryptfs_miscdev_ctx *miscdev_ctx,
 	memcpy((void *)&msg_seq_be32, &miscdev_msg_data[i], 4);
 	i += 4;
 	(*msg_seq) = ntohl(msg_seq_be32);
-	syslog(LOG_ERR, "msg_seq = %ld", msg_seq);//tremb1e
+	//syslog(LOG_ERR, "msg_seq = %ld", msg_seq);//tremb1e-syslog
 	if ((*msg_type) == ECRYPTFS_MSG_REQUEST) {
 		rc = ecryptfs_parse_packet_length((unsigned char *)
 						    &miscdev_msg_data[i],
@@ -152,7 +152,8 @@ int ecryptfs_recv_miscdev(struct ecryptfs_miscdev_ctx *miscdev_ctx,
 		i += packet_len_size;
 	} else if ((*msg_type) == ECRYPTFS_MSG_REQUEST_FEK ) {	//tremb1e
 		//接受消息类型为ECRYPTFS_MSG_REQUEST_FEK
-		syslog(LOG_ERR, "接受消息类型为ECRYPTFS_MSG_REQUEST_FEK");
+		//tremb1e-syslog
+		//syslog(LOG_ERR, "接受消息类型为ECRYPTFS_MSG_REQUEST_FEK");
 		// rc = ecryptfs_parse_packet_length((unsigned char *)
 		// 				    &miscdev_msg_data[i],
 		// 				  &packet_len,
@@ -256,8 +257,8 @@ int ecryptfs_send_fek(struct ecryptfs_miscdev_ctx *miscdev_ctx,
 	 *  include a message */
 	if (msg) {
 		packet_len = (sizeof(*msg) + msg->data_len);
-		syslog(LOG_ERR, "packet_len = %u", packet_len);//tremb1e
-		syslog(LOG_ERR, "msg->data_len = %u", msg->data_len);//tremb1e
+		//syslog(LOG_ERR, "packet_len = %u", packet_len);//tremb1e-syslog
+		//syslog(LOG_ERR, "msg->data_len = %u", msg->data_len);//tremb1e-syslog
 		rc = ecryptfs_write_packet_length(packet_len_str, packet_len,
 						  &packet_len_size);
 		if (rc)
@@ -266,7 +267,7 @@ int ecryptfs_send_fek(struct ecryptfs_miscdev_ctx *miscdev_ctx,
 		packet_len_size = 0;
 		packet_len = 0;
 	}
-	syslog(LOG_ERR, "packet_len_size = %u", packet_len_size);//tremb1e
+	//syslog(LOG_ERR, "packet_len_size = %u", packet_len_size);//tremb1e-syslog
 	miscdev_msg_data_size = (1 + 4 + packet_len_size + packet_len);
 	miscdev_msg_data = malloc(miscdev_msg_data_size);
 	if (!miscdev_msg_data) {
@@ -285,8 +286,9 @@ int ecryptfs_send_fek(struct ecryptfs_miscdev_ctx *miscdev_ctx,
 	}
 	written = write(miscdev_ctx->miscdev_fd, miscdev_msg_data,
 			miscdev_msg_data_size);
-	//tremb1e
-	syslog(LOG_ERR, "msg->data = %s", msg->data);
+	//tremb1e-syslog
+	//syslog(LOG_ERR, "msg->data = %s", msg->data);
+
 	// for (j = 0; j < miscdev_msg_data_size; j++) {
     // 	syslog(LOG_ERR, "miscdev_msg_data []= %d", miscdev_msg_data[j]);
 	// 	syslog(LOG_ERR, "miscdev_msg_data []= %02x", miscdev_msg_data[j]);
@@ -394,7 +396,8 @@ receive:
 		struct ecryptfs_message *reply = NULL;
 		
 		fek_content = read_fek();//读取fek文件中的内容
-		syslog(LOG_ERR, "msg_type后fek内容 = %s\n", fek_content);
+		//tremb1e-syslog
+		//(LOG_ERR, "msg_type后fek内容 = %s\n", fek_content);
 
 		if (!fek_content) {
 			syslog(LOG_ERR, "fek content is null");
@@ -409,12 +412,13 @@ receive:
 		}
 		reply->data_len = ECRYPTFS_MAX_KEY_BYTES;
 		memcpy(reply->data, fek_content, ECRYPTFS_MAX_KEY_BYTES);
-		
-		syslog(LOG_ERR, "fek_content = : %s\n", fek_content);
-		syslog(LOG_ERR, "reply->data = : %s\n", reply->data);
+		//tremb1e-syslog
+		//syslog(LOG_ERR, "fek_content = : %s\n", fek_content);
+		//syslog(LOG_ERR, "reply->data = : %s\n", reply->data);
 		free(fek_content);
 		reply->index = emsg->index;
-		syslog(LOG_ERR, "reply->index = %ld", reply->index);
+		//tremb1e-syslog
+		//syslog(LOG_ERR, "reply->index = %ld", reply->index);
 		rc = ecryptfs_send_fek(miscdev_ctx, reply, ECRYPTFS_MSG_RESPONSE_FEK, 0, msg_seq);
 		if (rc)
 		{
