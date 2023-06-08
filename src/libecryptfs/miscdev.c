@@ -121,7 +121,7 @@ int ecryptfs_recv_miscdev(struct ecryptfs_miscdev_ctx *miscdev_ctx,
 	}
 	read_bytes = read(miscdev_ctx->miscdev_fd, miscdev_msg_data,
 			  ECRYPTFS_MSG_MAX_SIZE);
-	syslog(LOG_ERR, "在ecryptfs_recv_miscdev中read_bytes = %zd", read_bytes);//tremb1e
+	//syslog(LOG_ERR, "在ecryptfs_recv_miscdev中read_bytes = %zd", read_bytes);//tremb1e
 	if (read_bytes == -1) {
 		rc = -EIO;
 	syslog(LOG_ERR, "%s: Error attempting to read message from "
